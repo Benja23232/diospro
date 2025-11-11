@@ -57,10 +57,17 @@ php bin/console doctrine:database:create
 ---
 
 5. Ejecutar migraciones
-bash
+```bash
 
 
 php bin/console doctrine:migrations:migrate
+```
+o sino
+```bash
+
+
+php bin/console doctrine:schema:update --force
+```
 
 ---
 
