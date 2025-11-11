@@ -41,6 +41,8 @@ bash
 
 
 cp .env.example .env
+
+
 Configuracion de la Base de Datos: 
 DATABASE_URL="mysql://user:password@127.0.0.1:3306/diospro_db?serverVersion=8&charset=utf8mb4"
 
