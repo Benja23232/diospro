@@ -27,7 +27,9 @@ cd diospro
 
 2. Instalar dependencias
 bash
+
 --
+
 composer install
 
 ---
