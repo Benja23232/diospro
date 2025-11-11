@@ -38,24 +38,32 @@ composer install
 Copiar el archivo .env.example a .env y ajustar la conexión a la base de datos:
 
 bash
+
+
 cp .env.example .env
 Configuracion de la Base de Datos: 
 DATABASE_URL="mysql://user:password@127.0.0.1:3306/diospro_db?serverVersion=8&charset=utf8mb4"
 
 4. Crear la base de datos
 bash
+
+
 php bin/console doctrine:database:create
 
 ---
 
 5. Ejecutar migraciones
 bash
+
+
 php bin/console doctrine:migrations:migrate
 
 ---
 
 6. Cargar datos de prueba (fixtures)
 bash
+
+
 php bin/console doctrine:fixtures:load --env=dev
 
 ---
@@ -63,6 +71,8 @@ php bin/console doctrine:fixtures:load --env=dev
 🖥️ Uso
 Levantar el servidor local de Symfony:
 bash
+
+
 symfony server:start
 Acceder en el navegador:
 http://127.0.0.1:8000
