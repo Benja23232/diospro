@@ -72,10 +72,14 @@ php bin/console doctrine:fixtures:load --env=dev
 
 🖥️ Uso
 Levantar el servidor local de Symfony:
+
+
 bash
 
 
 symfony server:start
+
+
 Acceder en el navegador:
 http://127.0.0.1:8000
 
