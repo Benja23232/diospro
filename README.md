@@ -26,31 +26,33 @@ cd diospro
 ---
 
 2. Instalar dependencias
-bash
-
+```bash
 
 
 composer install
+```
 
 ---
 
 3. Configurar entorno
 Copiar el archivo .env.example a .env y ajustar la conexión a la base de datos:
 
-bash
+```bash
 
 
 cp .env.example .env
+```
 
 
 Configuracion de la Base de Datos: 
-DATABASE_URL="mysql://user:password@127.0.0.1:3306/diospro_db?serverVersion=8&charset=utf8mb4"
+DATABASE_URL="mysql://root@127.0.0.1:3306/diospro_db?serverVersion=10.4&charset=utf8mb4"
 
 4. Crear la base de datos
-bash
+```bash
 
 
 php bin/console doctrine:database:create
+```
 
 ---
 
@@ -63,10 +65,11 @@ php bin/console doctrine:migrations:migrate
 ---
 
 6. Cargar datos de prueba (fixtures)
-bash
+```bash
 
 
 php bin/console doctrine:fixtures:load --env=dev
+```
 
 ---
 
@@ -74,10 +77,11 @@ php bin/console doctrine:fixtures:load --env=dev
 Levantar el servidor local de Symfony:
 
 
-bash
+```bash
 
 
 symfony server:start
+```
 
 
 Acceder en el navegador:
