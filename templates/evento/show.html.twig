@@ -1,0 +1,232 @@
+{# templates/evento/show.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Detalle del Evento{% endblock %}
+
+{% block body %}
+    <style>
+        h1 {
+            font-family: AVIAN;
+            color: rgb(250, 126, 2);
+            margin-bottom: 10px;
+        }
+        .contenedor {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            color: white;
+        }
+        table {
+            width: 100%;
+            color: white;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        th {
+            background-color: rgba(250, 126, 2, 0.5);
+            font-weight: 600;
+        }
+        tbody tr:nth-child(odd) {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        tbody tr:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+        a.btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 8px 15px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        a.btn:hover {
+            background-color: #218838;
+        }
+        .btn-volver {
+            display: inline;
+            padding: 10px;
+            margin: 5px;
+            text-decoration: none;
+            font-size: 15px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }    
+        .btn-volver:hover {
+            color: #ccc;
+        }
+        .btn-delete button {
+            background-color: #dc3545;
+            margin: 10px;
+            padding: 5px;
+        }
+
+         .btn-buscar {
+            display: inline;
+            padding: 10px;
+            margin: 5px;
+            text-decoration: none;
+            font-size: 15px;
+            background-color: rgba(0, 0, 0,0.2);
+            color: black;
+            border: 2px solid rgba(129, 89, 89, 0.2);
+            border-radius: 5px;
+        }    
+        .btn-buscar:hover {
+            color: #ccc;
+        }
+
+         .btn-buscar::placeholder {
+            color:rgb(209, 179, 179);
+        }
+        
+        .btn-delete{
+           text-align:right;
+           color: white;
+           border: none;
+           text-decoration: none;
+           padding: 10px 20px;
+           border-radius: 6px;
+           font-size: 16px;
+           cursor: pointer;
+           transition: background-color 0.3s ease;
+           outline:none;         
+
+        }
+        .btn-delete button:hover {
+            background-color: #c82333;
+        }  
+        .btn-toggle-inscripcion {
+            font-family: AVIAN, sans-serif;         
+            padding: 10px 15px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-toggle-inscripcion.abrir {
+            background-color: #28a745;
+        }
+
+        .btn-toggle-inscripcion.abrir:hover {
+            background-color: #218838;
+        }
+
+        .btn-toggle-inscripcion.cerrar {
+            background-color: #dc3545;
+        }        
+
+        .btn-toggle-inscripcion.cerrar:hover {
+            background-color: #c82333;
+        }
+    </style>
+
+    <h1>{{ evento.nombre }}</h1>
+
+    <div class="contenedor">
+        <div class="item">
+            <p><strong>Descripción:</strong> {{ evento.descripcion }}</p>
+            <p><strong>Fecha de inicio:</strong> {{ evento.fechaInicio ? evento.fechaInicio|date('d/m/Y') : 'Sin fecha' }}</p>
+            <p><strong>Fecha de fin:</strong> {{ evento.fechaFin ? evento.fechaFin|date('d/m/Y') : 'Sin fecha' }}</p>
+            <p><strong>Localidad:</strong> {{ evento.localidad ? evento.localidad.nombre : 'Sin localidad' }}</p>
+        </div>
+        <div>
+          <a href="{{ path('app_participante_new', { evento: evento.id }) }}" class="btn btn-agregar">
+                 Crear nuevo participante
+             </a>
+             <input type="text" id="busquedaDni" placeholder="Buscar por DNI..." class="btn-buscar">
+        </div>
+        <div class="item">
+            <h2>Participantes inscritos ({{ participantes|length }})</h2>
+            {% if participantes|length > 0 %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>DNI</th>
+                            <th>Localidad</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for participante in participantes %}
+                            <tr>
+                                <td>{{ participante.nombre }}</td>
+                                <td>{{ participante.apellido }}</td>
+                                <td>{{ participante.dni }}</td>
+                                <td>{{ participante.localidad ? participante.localidad.nombre : 'Sin localidad' }}</td>
+                                <td>
+                                    <a href="{{ path('app_participante_show', {'id': participante.id}) }}" class="btn btn-sm btn-info">
+                                        Ver más detalles
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No hay participantes en este evento.</p>
+            {% endif %}
+             
+        </div>
+       
+    </div> 
+
+    {% if is_granted('ROLE_SUPER_ADMIN') %}
+        <form method="post" action="{{ path('evento_toggle_inscripcion', { id: evento.id }) }}" style="display:inline" onsubmit="return confirm('¿Seguro que quieres cambiar el estado de inscripción para este evento?');">
+            <input type="hidden" name="_token" value="{{ csrf_token('toggle_insc_' ~ evento.id) }}">
+            <button class="btn-toggle-inscripcion {{ evento.inscripcionAbiertaParaAdmins ? 'cerrar' : 'abrir' }}">
+                {{ evento.inscripcionAbiertaParaAdmins ? 'Cerrar inscripción a admins' : 'Abrir inscripción a admins' }}
+            </button>
+        </form>
+    {% endif %}
+
+    <a href="{{ path('app_evento_exportar_excel', {id: evento.id}) }}" class="btn">
+        <i class="fas fa-file-excel"></i> Exportar participantes a Excel
+    </a>
+    <a href="{{ path('app_evento_index') }}" class="btn-volver">Volver a la lista</a>
+
+    {% if is_granted('ROLE_SUPER_ADMIN') %}
+        <div class="btn-delete">
+            {{ include('evento/_delete_form.html.twig') }}
+        </div>
+    {% endif %}
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const input = document.getElementById('busquedaDni');
+        const filas = document.querySelectorAll('tbody tr');
+
+        input.addEventListener('input', function () {
+            const filtro = input.value.trim().toLowerCase();
+
+            filas.forEach(fila => {
+                const dni = fila.querySelector('td:nth-child(3)').textContent.toLowerCase();
+                fila.style.display = dni.includes(filtro) ? '' : 'none';
+            });
+        });
+    });
+</script>
+
+{% endblock %}

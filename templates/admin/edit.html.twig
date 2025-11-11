@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}EDITAR Admin{% endblock %}
+
+{% block body %}
+<div class="home-div">
+    
+    <h1>Edición de Administrador</h1>
+
+    
+
+    <div class="prt2">
+        {{ include('admin/_form.html.twig', {'button_label': 'ACTUALIZAR'}) }}
+
+       
+        {{ include('admin/_delete_form.html.twig') }}
+    </div>
+        
+</div>
+{% endblock %}

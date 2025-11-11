@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Buscar Participante{% endblock %}
+
+{% block body %}
+    <h2>Buscar Participante por DNI</h2>
+
+    {{ form_start(form) }}
+        {{ form_row(form.dni) }}
+        <button class="btn btn-primary">Buscar</button>
+    {{ form_end(form) }}
+
+    {% if participante %}
+        <h3>Resultado:</h3>
+        <ul>
+            <li><strong>Nombre:</strong> {{ participante.nombre }} {{ participante.apellido }}</li>
+            <li><strong>DNI:</strong> {{ participante.dni }}</li>
+            <li><strong>Edad:</strong> {{ participante.edad }}</li>
+            <li><strong>Localidad:</strong> {{ participante.localidad.nombre }}</li>
+             <li><strong>Dieta:</strong> {% if participante.dieta == 'otro' and participante.otraDieta %}
+                        {{ participante.otraDieta }}
+                    {% else %}
+                        {{ participante.dieta }}
+                    {% endif %}</li>
+            {# Agregá otros datos si querés #}
+        </ul>
+    {% endif %}
+{% endblock %}

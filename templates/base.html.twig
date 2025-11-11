@@ -1,0 +1,289 @@
+{# templates/base.html.twig #}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Proyecto Diócesis{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        @font-face {
+          font-family: 'AVIAN';
+          src: url('/fuentes/AVIAN.ttf') format('truetype');
+          font-weight: normal;
+          font-style: normal;
+        }
+        
+        html, body {
+            margin: 0;
+            padding: 0;
+            min-height: 100%;
+            font-family: 'AVIAN';
+            background: url('{{ asset('imagenes/fondo.png') }}') no-repeat center center fixed;
+            background-size: cover;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-color: black; /* fallback si la imagen no carga */
+            color: white;
+        }
+        
+        /* --- Estilos del Navbar --- */
+        .navbar {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background-color: rgba(30, 30, 30, 0.9);
+            padding: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .navbar h1 {
+            font-size: 20px;
+            color: rgb(250, 126, 2);
+            margin: 0;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 8px 15px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        .navbar a:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+        /* --- Fin Estilos del Navbar --- */
+
+        .content {
+            flex: 1;
+            padding: 40px;
+            backdrop-filter: blur(5px);
+            min-height: 80vh;
+        }
+
+        h2 {
+            text-align: center;
+            margin-top: 0;
+        }
+
+        /* Estilos para las tarjetas, si se usan en varias páginas, van aquí */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .card {
+            background-color: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            color: white;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .card:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+
+        .card i {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            color: white;
+            font-size: 14px;
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+
+        footer a {
+            color: rgb(250, 126, 2);
+            text-decoration: none;
+        }
+
+        h1{
+            text-align:center;
+        }
+
+         /* Estilos para las tablas, si se usan en varias páginas, van aquí */
+      .custom-table {        
+         width: 100%;
+            border-collapse: collapse;
+            background-color: rgba(255, 255, 255, 0.05); /* Fondo translúcido */
+            box-shadow: 0 0 8px rgba(0,0,0,0.2);
+            border-radius: 8px;
+         overflow: hidden;
+         color: white;
+            margin-top: 20px;
+        }
+
+        .custom-table th, .custom-table td {
+            border: 1px solid rgba(250, 126, 2, 0.6); /* Borde naranja semitransparente */
+            padding: 10px;
+            text-align: left;
+        }
+        
+        .custom-table th {
+            background-color: rgb(250, 126, 2); /* Naranja fuerte */
+            color: white;
+            font-weight: bold;
+        }
+
+        .custom-table tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.05); /* Gris suave translúcido */
+        }
+
+        .custom-table tr:hover {
+            background-color: rgba(255, 255, 255, 0.1); /* Hover más visible */
+            transition: background 0.3s ease;
+        }
+
+        .custom-table td a {
+            color: orange;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .custom-table td a:hover {
+            text-decoration: underline;
+        }
+        .agregar {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: flex-end; /* Alinea el botón a la derecha */
+}
+
+/* Estilo principal para el botón de agregar */
+.btn-agregar {
+    display: inline-block;
+    background-color: #3b82f6; /* Color azul primario */
+    color: white;
+    padding: 0.75rem 2rem;
+    border-radius: 9999px; /* Bordes completamente redondeados */
+    text-decoration: none;
+    font-weight: 600;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+}
+
+/* Estilo al pasar el cursor sobre el botón */
+.btn-agregar:hover {
+    background-color: #2563eb; /* Un azul un poco más oscuro al hacer hover */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(59, 130, 246, 0.2);
+}
+.logout-button {
+  background-color: #f44336; /* rojo suave */
+  color: white;
+  border: none;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  outline:none;
+}
+
+.logout-button:hover {
+  background-color: #d32f2f;}
+  .sec-logout{
+    padding:10px;
+    margin:5px;
+    
+  }
+
+  .menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  margin-right: 15px;
+}
+
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: block;
+  }
+
+  .navbar nav {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  .navbar nav.show {
+    display: flex;
+  }
+
+  .navbar a {
+    margin: 10px 0;
+  }
+}
+
+
+
+    </style>
+    {% block stylesheets %} <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />{% endblock %}
+    {% block javascripts %}<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2({
+                placeholder: "Seleccionar tutores",
+                allowClear: true
+            });
+        });
+    </script> {% endblock %}
+</head>
+<body>
+
+    {# --- Código del Navbar --- #}
+    <div class="navbar">
+        <h1>Proyecto Diócesis</h1>
+        <button class="menu-toggle" onclick="document.querySelector('.navbar nav').classList.toggle('show')">
+          <i class="fas fa-bars"></i>
+        </button>
+        
+        <nav>
+            {# Es crucial que 'app_home', 'app_evento_index', etc., sean nombres de rutas definidos en tus controladores. #}
+            <a href="{{ path('app_inicio') }}"><i class="fas fa-home"></i> Inicio</a>
+            <a href="{{ path('app_evento_index') }}"><i class="fas fa-calendar"></i> Eventos</a>
+            <a href="{{ path('app_participante_index') }}"><i class="fas fa-users"></i> Participantes</a>
+            <a href="{{ path('app_inscripcion_new') }}"><i class="fas fa-file-signature"></i> Inscripciones</a>
+            <a href="{{ path('app_localidad_index') }}"><i class="fas fa-map-marker-alt"></i> Localidades</a>
+            <a href="{{ path('app_admin_index') }}"><i class="fas fa-user-shield"></i> Administradores</a>
+        </nav>
+    </div>
+    {# --- Fin Código del Navbar --- #}
+    {# Mensajes flash globales #}
+     
+
+    <div class="content">
+        {% block body %}{% endblock %}
+    </div>
+    <div class="sec-logout">
+      <a href="{{ path('app_logout') }}" class="logout-button">Cerrar sesion </a>
+    </div>
+    <footer>
+        Creado por <strong>Benjamin Arancivia</strong> —
+        <a href="https://www.instagram.com/benja_arancivia" target="_blank">@benja_arancivia</a>
+    </footer>
+
+</body>
+</html>

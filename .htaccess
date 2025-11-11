@@ -1,0 +1,12 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # 🚫 Excepción: no reescribir nada que esté en /media/
+    RewriteCond %{REQUEST_URI} ^/media/ [NC]
+    RewriteRule ^ - [L]
+
+    # Si el archivo o directorio no existe, redirige a index.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>

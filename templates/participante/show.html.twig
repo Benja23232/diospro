@@ -1,0 +1,127 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Participante{% endblock %}
+
+{% block body %}
+<style>
+  .centro {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .datos-participante {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 700px;
+    border-collapse: collapse;
+    color: white;
+  }
+
+  .datos-participante th,
+  .datos-participante td {
+    padding: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    text-align: left;
+  }
+
+  .datos-participante th {
+    text-align: right;
+    font-weight: bold;
+    width: 30%;
+  }
+
+  .datos-participante td {
+    text-align: left;
+    width: 70%;
+  }
+
+  .botones {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+}
+
+.botones a,
+.btn-delete button {
+  padding: 8px 15px;
+  border-radius: 5px;
+  border: none;
+  text-decoration: none;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.botones a {
+  background-color: #007bff;
+}
+
+.botones a:hover {
+  background-color: #0056b3;
+}
+
+.btn-delete button {
+  background-color: #dc3545;
+}
+
+.btn-delete button:hover {
+  background-color: #c82333;
+}
+</style>
+
+<div class="centro">
+  <h1>Participante</h1>
+
+  <table class="datos-participante">
+    <tbody>
+      {# --- Aquí mantenemos todos tus campos como ya están --- #}
+      <tr><th>Id</th><td>{{ participante.id }}</td></tr>
+      <tr><th>Nombre</th><td>{{ participante.nombre }}</td></tr>
+      <tr><th>Apellido</th><td>{{ participante.apellido }}</td></tr>
+      <tr><th>Dni</th><td>{{ participante.dni }}</td></tr>
+      <tr><th>Sexo</th><td>{{ participante.sexo }}</td></tr>
+      <tr><th>FechaNacimiento</th><td>{{ participante.fechaNacimiento ? participante.fechaNacimiento|date('Y-m-d') : '' }}</td></tr>
+      <tr><th>Edad</th><td>{{ participante.edad }}</td></tr>
+      <tr><th>Celular</th><td>{{ participante.celular }}</td></tr>
+      <tr><th>Dirección</th><td>{{ participante.deQueParticipa }}</td></tr>
+      <tr><th>ObraSocial-n°afiliado</th><td>{{ participante.obraSocialnumeroAfiliado}}</td></tr>
+      <tr><th>observaciones</th><td>{{ participante.observaciones}}</td></tr>
+      <tr><th>Dieta</th><td>{{ participante.dieta }}</td></tr>
+      <tr><th>OtraDieta</th><td>{{ participante.otraDieta }}</td></tr>
+      <tr><th>Medicacion</th><td>{{ participante.medicacion }}</td></tr>
+      <tr><th>OtraMedicacion</th><td>{{ participante.otraMedicacion }}</td></tr>
+      <tr><th>Dificultades</th><td>{{ participante.dificultades }}</td></tr>
+      <tr><th>OtrasDificultades</th><td>{{ participante.otrasDificultades }}</td></tr>
+      <tr><th>Localidad</th><td>{{ participante.localidad.nombre }}</td></tr>
+      <tr><th>¿Como participa?</th><td>{{ participante.deQueParticipa}}</td>
+      <tr><th>Tutor 1</th><td>{{ participante.tutor1}} / tel: {{ participante.telefonoTutor1}}</td></tr>
+      <tr><th>Tutor 2</th><td>{{ participante.tutor2}} / tel: {{ participante.telefonoTutor2}}</td></tr>
+     
+      <tr>
+        <th>Ficha Médica</th>
+        <td>
+          {% if participante.fichaMedicaFileName %}
+              <a href="{{ asset('uploads/fichas_medicas/' ~ participante.fichaMedicaFileName) }}" target="_blank">
+                  Ver/Descargar Ficha Médica
+              </a>
+          {% else %}
+              No se ha subido ninguna ficha médica.
+          {% endif %}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="botones">
+    <a href="{{ path('app_participante_index') }}">Volver a la lista</a>
+    <a href="{{ path('app_participante_edit', {'id': participante.id}) }}">Editar</a>
+    <div class="btn-delete">
+      {{ include('participante/_delete_form.html.twig') }}
+    </div>
+  </div>
+</div>
+{% endblock %}

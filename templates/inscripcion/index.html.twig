@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscripcion index{% endblock %}
+
+{% block body %}
+ 
+    <h1>Inscripciones</h1>
+
+    <table class="custom-table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>FechaInscripcion</th>
+                <th>Participante</th>
+                <th>Evento</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for inscripcion in inscripcions %}
+            <tr>
+                <td>{{ inscripcion.id }}</td>
+                <td>{{ inscripcion.fechaInscripcion ? inscripcion.fechaInscripcion|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{inscripcion.participante.nombre}} {{inscripcion.participante.apellido}}</td>
+                <td>{{inscripcion.evento.nombre}}</td>
+                <td>
+                    <a href="{{ path('app_inscripcion_show', {'id': inscripcion.id}) }}">show</a>
+                    <a href="{{ path('app_inscripcion_edit', {'id': inscripcion.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+  <div class="agregar">
+    <a href="{{ path('app_inscripcion_new') }}" class="btn-agregar">Realizar Inscripcion</a>
+  </div>
+{% endblock %}

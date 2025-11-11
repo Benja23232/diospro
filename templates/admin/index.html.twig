@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin {% endblock %}
+
+{% block body %}
+    <h1>Administradores del Sistema  </h1>
+
+    <table class="custom-table">
+        <thead>
+            <tr class="tr">
+                <th class="th">Email</th>
+                <th class="th">Roles</th>
+                <!-- <th class="th">Password</th> -->
+                <th>Localidad</th>
+                <th class="th">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for admin in admins %}
+            <tr class="tr">
+                <td class="td">{{ admin.email }}</td>
+                <td class="td">{{ admin.roles ? admin.roles|json_encode : '' }}</td>
+                <!-- <td class="td">{{ admin.password }}</td> -->
+                <td>{{ admin.localidad ? admin.localidad.nombre : 'Sin localidad' }}</td>
+                  <td class="td">
+                    <a href="{{ path('app_admin_show', {'id': admin.id}) }}">ver</a>
+                    <a href="{{ path('app_admin_edit', {'id': admin.id}) }}">editar</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr class="tr">
+                <td class="td" colspan="5">sin registros</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+  <div class="agregar">
+    <a href="{{ path('app_admin_new') }}" class="btn-agregar">Agregar Administrador</a>
+  </div>
+
+    
+{% endblock %}

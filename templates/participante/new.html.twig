@@ -1,0 +1,245 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nuevo Participante{% endblock %}
+
+{% block body %}
+    <style>
+        /* Estilos originales del usuario */
+        .form-container-wrapper {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 30px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .participante-form {
+            border-radius: 10px;
+            padding: 0;
+        }
+
+        .participante-form div.mb-3,
+        .participante-form div.form-group,
+        .participante-form div.form-row {
+            margin-bottom: 15px;
+        }
+
+        .participante-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .participante-form input,
+        .participante-form select,
+        .participante-form textarea {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+
+        .participante-form input[type="radio"],
+        .participante-form input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
+        .participante-form input[type="radio"] + label,
+        .participante-form input[type="checkbox"] + label {
+            display: inline-block;
+            font-weight: normal;
+        }
+
+        .participante-form .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .participante-form .btn-primary {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            margin-right: 10px;
+            margin-top: 20px;
+        }
+
+        .participante-form .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .participante-form .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            margin-top: 20px;
+        }
+
+        .participante-form .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .btn-info-return {
+            background-color: #17a2b8;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-info-return:hover {
+            background-color: #117a8b;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+    </style>
+
+    <h1>Crear nuevo Participante</h1>
+
+    <div class="form-container-wrapper">
+        <!--
+            Aquí es donde se renderizarán todos los campos del formulario.
+            El botón de "Guardar Participante" ahora se muestra
+            al final de todos los campos.
+        -->
+        {{ include('participante/_form.html.twig', {'button_label': 'Guardar Participante'}) }}
+
+        <!-- El botón "Crear Nuevo Tutor" también se ha movido para que
+             quede dentro del contenedor del formulario y se mantenga la coherencia. -->
+        <!--<button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#createTutorModal">
+            Crear Nuevo Tutor
+        </button>-->
+    </div>
+
+    <div style="text-align: center; margin-bottom: 40px;">
+        <a href="{{ path('app_participante_index') }}" class="btn-info-return">Volver a la lista</a>
+    </div>
+
+    <!--<div class="modal fade" id="createTutorModal" tabindex="-1" aria-labelledby="createTutorModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createTutorModalLabel">Crear Nuevo Tutor</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-center">Cargando formulario...</p>
+                </div>
+            </div>
+        </div>
+    </div>-->
+{% endblock %}
+
+{% block javascripts %}
+<!-- <script>
+     document.addEventListener('DOMContentLoaded', () => {
+        const createTutorModal = new bootstrap.Modal(document.getElementById('createTutorModal'));
+
+        document.getElementById('createTutorModal').addEventListener('show.bs.modal', async () => {
+            const modalBody = document.querySelector('#createTutorModal .modal-body');
+            try {
+                modalBody.innerHTML = '<p class="text-center text-muted py-3">Cargando formulario...</p>';
+
+               
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+
+                if (!response.ok) throw new Error('No se pudo cargar el formulario.');
+
+                const formHtml = await response.text();
+                modalBody.innerHTML = formHtml;
+                setupFormListener();
+            } catch (error) {
+                modalBody.innerHTML = '<p class="text-danger text-center">Error al cargar el formulario.</p>';
+                console.error(error);
+            }
+        });
+
+        const setupFormListener = () => {
+            const form = document.getElementById('tutor_modal_form');
+            const closeBtn = document.getElementById('closeFormModalBtnInside');
+            const modalBody = document.querySelector('#createTutorModal .modal-body');
+
+            if (closeBtn) {
+                closeBtn.addEventListener('click', () => createTutorModal.hide());
+            }
+
+            if (form) {
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+
+                    const submitBtn = form.querySelector('button[type="submit"]');
+                    if (submitBtn) submitBtn.disabled = true;
+
+                    try {
+                        const response = await fetch(form.action, {
+                            method: 'POST',
+                            body: new FormData(form),
+                            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                        });
+
+                        const contentType = response.headers.get("content-type");
+
+                        if (response.ok && contentType.includes("application/json")) {
+                            const result = await response.json();
+
+                            const nombre = result.tutor?.nombreCompleto ?? 'Tutor sin nombre';
+                            const id = result.tutor?.id;
+
+                            if (nombre && id) {
+                                const tutorSelect = document.getElementById('participante_tutores');
+                                const option = new Option(nombre, id);
+                                tutorSelect.add(option);
+                                tutorSelect.value = id;
+                                /*console.log('Tutor agregado:', nombre);*/
+                                createTutorModal.hide();
+                            } else {
+                                modalBody.innerHTML = '<div class="alert alert-danger">Respuesta incompleta. Intente nuevamente.</div>';
+                                console.warn('JSON incompleto:', result);
+                            }
+                        } else {
+                            const html = await response.text();
+                            modalBody.innerHTML = html;
+                            setupFormListener();
+                            modalBody.prepend(createAlert('Error al guardar el tutor.', 'danger'));
+                        }
+                    } catch (error) {
+                        modalBody.innerHTML = '<div class="alert alert-danger">Error al enviar el formulario.</div>';
+                        console.error(error);
+                    } finally {
+                        if (submitBtn) submitBtn.disabled = false;
+                    }
+                });
+            }
+        };
+
+        const createAlert = (message, type = 'info') => {
+            const div = document.createElement('div');
+            div.className = `alert alert-${type} mt-3`;
+            div.textContent = message;
+            return div;
+        };
+        */
+    });
+</script>
+-->
+{% endblock %}

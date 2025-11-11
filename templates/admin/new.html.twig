@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Crear Administradores del Sistema{% endblock %}
+
+{% block body %}
+<style>
+.participante-form h1 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 20px;
+}
+</style>
+<div class="participante-form">
+    <h1>Crear un administrador nuevo</h1>
+    {{ include('admin/_form.html.twig') }}
+</div>
+ {% endblock %}

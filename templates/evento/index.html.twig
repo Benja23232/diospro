@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Listado de Eventos{% endblock %}
+
+{% block body %}
+  <style>
+    .titulo-eventos {
+      text-align: center;
+      margin-bottom: 30px;
+      color: white;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .evento-card {
+      background-color: rgba(255,255,255,0.1);
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.2);
+      color: white;
+    }
+
+    .evento-card h3 {
+      margin-top: 0;
+      color: orange;
+    }
+
+    .evento-card a {
+      color: #00f7ff;
+      text-decoration: underline;
+    }
+
+    .evento-card small {
+      font-size: 13px;
+      color: #ccc;
+    }
+    .contenedor-btn{
+      display:flex;
+
+    }
+    .btn{
+      display:inline;
+      padding:10px;
+      margin:5px;
+      text-decoration:none;
+      font-size:15px;
+      background-color: rgba(255,255,255,0.1);
+      color:white;
+      
+      border:1px solid rgba(255,255,255,0.2);
+      border-radius:5px;
+    }
+  </style>
+
+  <h1 class="titulo-eventos">Listado de Eventos</h1>
+
+  <div class="grid-container">
+    {% for evento in eventos %}
+      <div class="evento-card">
+        <h3>{{ evento.nombre }}</h3>
+
+        <p><strong>Inicio:</strong> {{ evento.fechaInicio ? evento.fechaInicio|date('d/m/Y') : 'Sin fecha' }}</p>
+        <p><strong>Fin:</strong> {{ evento.fechaFin ? evento.fechaFin|date('d/m/Y') : 'Sin fecha' }}</p>
+
+        <p>
+          <strong>Descripción:</strong>
+          {% if evento.descripcion|length > 100 %}
+            {{ evento.descripcion[:100] ~ '...' }}
+          {% else %}
+            {{ evento.descripcion }}
+          {% endif %}
+        </p>
+
+        <a href="{{ path('app_evento_show', {'id': evento.id}) }}">Ver detalle</a>
+      </div>
+    {% else %}
+      <p>No se encontraron eventos.</p>
+    {% endfor %}
+  </div>
+
+  <div class="contenedor-btn">
+    <a href="{{ path('app_inicio') }}" class="btn">Volver</a>
+    <a href="{{ path('app_evento_new') }}" class="btn">Crear nuevo evento</a>
+    
+  </div>
+{% endblock %}

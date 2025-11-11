@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Proyecto Diocesis</title>
+    <style>
+      body {
+             background-image: url("{{ asset('imagenes/fondo.png') }}");
+             background-size: cover;
+             background-repeat: no-repeat;
+             background-position: center;
+             min-height: 100vh;
+            }
+    </style>
+
+   <!-- <style>
+
+        body {
+            background-color: #000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #f9f9f9;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-container {
+            background-color: #111;
+            border: 2px solidrgb(63, 60, 51);
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(255, 193, 7, 0.2);
+            width: 100%;
+            max-width: 700px;
+            max-height: 700px;
+            padding: 40px;
+            opacity: 0.95;
+        }
+
+        .login-container h1 {
+            text-align: center;
+            color:rgb(74, 70, 55);
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: #f1f1f1;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #555;
+            background-color: #222;
+            color: #fff;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            border-color:rgb(125, 116, 89);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color:rgb(131, 126, 112);
+            border: none;
+            border-radius: 6px;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color:rgb(202, 194, 171);
+        }
+        #inputEmail, #inputPassword {
+            font-size: 22px;
+        }
+    </style>
+    -->
+</head>
+<body>
+
+    <!--<div class="login-container">
+        <h1>Aca tengo que editar el login</h1>
+        <div style="display: flex; justify-content: center;">
+        <img src="{{ asset('') }}" alt="Imagen centrada" width="150" height="100">
+</div>
+-->
+        {% block body %}
+            <form method="post">
+                <div class="form-group">
+                    <label for="username">Usuario</label>
+                    <input type="text" id="username" name="_username" required autofocus>
+                </div>
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" name="_password" required>
+                </div>
+                <button id="iniciar"  class="btn-submit">Iniciar sesión</button>
+            </form>
+        {% endblock %}
+    </div>
+
+</body>
+</html>

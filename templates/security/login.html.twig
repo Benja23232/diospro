@@ -1,0 +1,226 @@
+{# templates/security/login.html.twig #}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Login - Proyecto Diócesis{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        /* Estilos generales para el body */
+        html, body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-family: 'Segoe UI', sans-serif;
+            justify-content: center;
+            align-items: center;
+            background-image: url('{{ asset('imagenes/fondo.png') }}'); /* Tu ruta de imagen de fondo */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            color: white;
+        }
+
+        /* Contenedor principal del login (dos paneles) */
+        .login-container {
+            display: flex;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            width: 700px;
+            max-width: 90%;
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+
+        /* Panel izquierdo (naranja con logo) */
+        .login-left {
+            flex: 1;
+            background-color: #FF9328;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+        }
+
+        .login-left img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Panel derecho (formulario) */
+        .login-right {
+            flex: 1;
+            background-color: rgba(30, 30, 30, 0.9);
+            padding: 40px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-right h1, .login-right h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+            font-size: 24px;
+        }
+
+        /* Estilos del formulario de login */
+        .login-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        /* Aplica estilos a los inputs con sus IDs y tipos para mayor especificidad */
+        .login-form input[type="email"]#inputEmail,
+        .login-form input[type="password"]#inputPassword {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            background-color: rgba(0, 0, 0, 0.3);
+            color: white;
+            font-size: 16px;
+        }
+
+        .login-form input[type="email"]#inputEmail::placeholder,
+        .login-form input[type="password"]#inputPassword::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .login-form input[type="email"]#inputEmail:focus,
+        .login-form input[type="password"]#inputPassword:focus {
+            outline: none;
+            border-color:  #FF9328;
+            box-shadow: 0 0 5px rgba(255, 140, 0, 0.5);
+        }
+
+        /* Botón de ingresar */
+        .login-form button {
+            width: 100%;
+            padding: 12px;
+            background-color: #FF9328;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .login-form button:hover {
+            background-color: #e07b00;
+        }
+
+        /* Mensaje de error */
+        .error-message {
+            background-color: #dc3545;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        /* Para el mensaje de "You are logged in as..." */
+        .logged-in-message {
+            background-color: #28a745;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            color: white;
+            font-size: 14px;
+            width: 100%;
+            margin-top: auto;
+        }
+
+        footer a {
+            color: rgb(250, 126, 2);
+            text-decoration: none;
+        }
+
+        /* Ajustes responsivos */
+        @media (max-width: 768px) {
+            .login-container {
+                flex-direction: column;
+                width: 95%;
+            }
+
+            .login-left, .login-right {
+                flex: none;
+                width: 100%;
+                padding: 20px;
+            }
+            .login-left {
+                padding-bottom: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <div class="login-left">
+            {# Asegúrate de colocar tu imagen del logo aquí. Por ejemplo, en public/images/pastoral_juvenil_logo.png #}
+            <img src="{{ asset('imagenes/logoPastoral.jpg') }}" alt="Pastoral Juvenil Logo">
+        </div>
+        <div class="login-right">
+            {# Formulario de login - Contenido de tu bloque `body` #}
+            <form method="post" action="{{ path('app_login') }}" class="login-form"> {# Añadido action y class #}
+                {# Mensaje de error #}
+                {% if error %}
+                    <div class="error-message">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% endif %}
+
+                {# Mensaje si el usuario ya está logueado #}
+                {% if app.user %}
+                    <div class="logged-in-message">
+                        You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}" style="color: white; text-decoration: underline;">Logout</a>
+                    </div>
+                {% endif %}
+
+                {# Título del formulario #}
+                <h1 class="h3 mb-3 font-weight-normal" style="color: white; text-align: center; margin-bottom: 30px;">Ingrese sus datos:</h1>
+                
+                {# Campo de Email #}
+                <label for="inputEmail">Email</label>
+                <input type="email" value="{{ last_username }}" name="email" id="inputEmail" autocomplete="email" required autofocus> {# Usando name="email" #}
+                
+                {# Campo de Password #}
+                <label for="inputPassword">Password</label>
+                <input type="password" name="password" id="inputPassword" autocomplete="current-password" required> {# Usando name="password" #}
+                
+                {# Título "Acceder al sistema" (lo convertimos a un párrafo o similar para que no se confunda con un botón) #}
+                <p style="text-align: center; margin-top: 20px; margin-bottom: 10px; font-size: 1.2em; color: white;">Acceder al sistema</p>
+
+                {# Botón de Ingresar #}
+                <button type="submit">Ingresar</button>
+
+                {# CSRF Token #}
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        Creado por <strong>Benjamin Arancivia</strong> —
+        <a href="https://www.instagram.com/benja_arancivia" target="_blank">@benja_arancivia</a>
+    </footer>
+
+</body>
+</html>

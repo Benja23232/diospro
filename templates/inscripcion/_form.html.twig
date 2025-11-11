@@ -1,0 +1,9 @@
+{{ form_start(form) }}
+    {{ form_errors(form) }}
+    {{ form_row(form.fechaInscripcion) }}
+    {{ form_row(form.participante) }}
+    {{ form_row(form.evento) }}
+    {{ form_row(form.deQueParticipa) }}
+
+    <button class="btn btn-primary">Guardar</button>
+{{ form_end(form) }}

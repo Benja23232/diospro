@@ -1,0 +1,342 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Inscripcion{% endblock %}
+
+{% block body %}
+    <style>
+        body {
+            /* Necesario para que el formulario fijo tenga un fondo que lo aísle */
+            position: relative; /* Opcional, pero útil si hay otros elementos fijos */
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+            max-width: 1200px; /* Define un ancho máximo para el contenedor del grid */
+            margin: 0 auto;    /* Centra el contenedor horizontalmente en la página */
+        }
+
+        .evento-card {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            color: white;
+            border: 1px solid #ccc;
+        }
+
+        .evento-card h3 {
+            margin-top: 0;
+            color: orange;
+        }
+
+        .evento-card p {
+            margin-bottom: 5px;
+        }
+
+    /*    /* --- Estilos para el formulario centrado en la página --- */
+        .formulario {
+            border-radius: 20px;
+            border: 2px solid rgba(255,255,255,0.2);
+            padding: 20px;
+            max-width: 400px;
+            background-color: white; /* Añade un color de fondo para que no sea transparente */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para que destaque */
+
+            /* Posicionamiento para centrarlo en la pantalla */
+            position: fixed; /* Lo saca del flujo normal y lo posiciona con respecto al viewport */
+            top: 50%;        /* Lo mueve al 50% desde arriba */
+            left: 50%;       /* Lo mueve al 50% desde la izquierda */
+            transform: translate(-50%, -50%); /* Ajusta para centrarlo exactamente */
+            z-index: 1000;   /* Asegura que esté por encima de otros elementos */
+            display: none; /* Oculto por defecto */
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+
+        .formulario label { 
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: black;
+        }
+
+        .formulario select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        /* Estilo para el contenedor del botón */
+        .btn-container {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        /* Estilo para el botón de mostrar formulario */
+        .mostrar-form-btn {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .mostrar-form-btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* --- Fondo oscuro cuando el formulario está activo (opcional) --- */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Fondo semitransparente oscuro */
+            z-index: 999; /* Justo debajo del formulario */
+            display: none; /* Oculto por defecto */
+        }
+        .guia-inscripcion {
+    background-color: rgba(255,255,255,0.9);
+    padding: 20px;
+    margin: 40px auto;
+    max-width: 700px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    color: #333;
+}
+
+.guia-inscripcion h2 {
+    margin-top: 0;
+    color: #007bff;
+}
+
+.guia-inscripcion ul {
+    padding-left: 20px;
+    margin-bottom: 20px;
+}
+
+.guia-inscripcion li {
+    margin-bottom: 8px;
+}
+
+
+</style>
+
+
+    <h1>Nueva Inscripción</h1>
+
+    <h2 class="title-eventos">Eventos disponibles</h2>
+
+    <div class="grid-container">
+        {% for evento in eventos %}
+            <div class="evento-card">
+                <h3>{{ evento.nombre }}</h3>
+                <p><strong>Inicio:</strong> {{ evento.fechaInicio ? evento.fechaInicio|date('d/m/Y') : 'Sin fecha' }}</p>
+                <p><strong>Fin:</strong> {{ evento.fechaFin ? evento.fechaFin|date('d/m/Y') : 'Sin fecha' }}</p>
+                <p>
+                    <strong>Descripción:</strong>
+                    {% if evento.descripcion|length > 100 %}
+                        {{ evento.descripcion[:100] ~ '...' }}
+                    {% else %}
+                        {{ evento.descripcion }}
+                    {% endif %}
+                </p>
+            </div>
+        {% endfor %}
+
+</div>
+
+        {# El formulario ya no necesita 'place-self: center;' porque estará fijo en la pantalla #}
+        {# y lo moveremos FUERA del .grid-container para que no interfiera con el layout del grid #}
+    </div>
+     <div class="btn-container">
+            <button id="mostrarFormBtn" class="mostrar-form-btn">Inscribir participante a un evento</button>
+        </div>
+          <div class="guia-inscripcion">
+    <h2>¿Cómo realizar una inscripcion?</h2>
+    <ol> 
+        <li> Entrar al apartado participantes y crear uno nuevo(si no existe).</li>
+        <li> Volver al apartado de Inscripcion.</li>
+        <li> Presionar boton Inscribir participante a un evento.</li>
+        <li> Completar el formulario.</li>
+        <li> Guardar la Inscripcion.</li>
+    </ol>
+
+
+    {# El formulario se mueve fuera del grid-container para que pueda posicionarse fijo en la página #}
+    <div class="overlay" id="formOverlay"></div> {# Capa de fondo oscuro #}
+    <div class="formulario" id="inscripcionForm">
+        <h3>Nueva inscripción</h3>
+        {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <button class="btn btn-primary">Guardar inscripción</button>
+            {# Botón para cerrar el formulario (NUEVO) #}
+            <button type="button" id="cerrarFormBtn" class="btn btn-secondary" style="margin-top: 10px;">Cerrar</button>
+        {{ form_end(form) }}
+    </div>
+
+    
+<script>
+document.getElementById('dniParticipante').addEventListener('blur', function() {
+    let dni = this.value.trim();
+    if (dni.length === 0) return;
+
+    fetch('{{ path("buscar_participante") }}?dni=' + encodeURIComponent(dni))
+        .then(response => response.json())
+        .then(data => {
+            if (data.found) {
+                document.getElementById('nombreParticipante').value = data.nombre;
+                document.getElementById('apellidoParticipante').value = data.apellido;
+            } else {
+                document.getElementById('nombreParticipante').value = '';
+                document.getElementById('apellidoParticipante').value = '';
+                alert('No se encontró un participante con ese DNI.');
+            }
+        })
+        .catch(err => console.error(err));
+});
+</script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mostrarFormBtn = document.getElementById('mostrarFormBtn');
+            const inscripcionForm = document.getElementById('inscripcionForm');
+            const btnContainer = document.querySelector('.btn-container');
+            const formOverlay = document.getElementById('formOverlay'); // Referencia a la capa oscura
+            const cerrarFormBtn = document.getElementById('cerrarFormBtn'); // Referencia al botón cerrar
+
+            function showForm() {
+                inscripcionForm.style.display = 'block';
+                formOverlay.style.display = 'block'; // Muestra la capa oscura
+                btnContainer.style.display = 'none'; // Oculta el botón
+            }
+
+            function hideForm() {
+                inscripcionForm.style.display = 'none';
+                formOverlay.style.display = 'none'; // Oculta la capa oscura
+                btnContainer.style.display = 'flex'; // Muestra el botón
+            }
+
+            // Abre el formulario al hacer clic en el botón principal
+            mostrarFormBtn.addEventListener('click', showForm);
+
+            // Cierra el formulario al hacer clic en el botón "Cerrar"
+            cerrarFormBtn.addEventListener('click', hideForm);
+
+            // Opcional: Cierra el formulario al hacer clic fuera de él (en la capa oscura)
+            formOverlay.addEventListener('click', hideForm);
+        });
+    </script>
+    
+
+    <script>
+         document.addEventListener('DOMContentLoaded', function() {
+             const mostrarFormBtn = document.getElementById('mostrarFormBtn');
+             const inscripcionForm = document.getElementById('inscripcionForm');
+             const btnContainer = document.querySelector('.btn-container');
+             const formOverlay = document.getElementById('formOverlay');
+             const cerrarFormBtn = document.getElementById('cerrarFormBtn');
+
+             function showForm() {
+                 inscripcionForm.style.display = 'block';
+                 formOverlay.style.display = 'block';
+                 btnContainer.style.display = 'none';
+             }
+
+             function hideForm() {
+                 inscripcionForm.style.display = 'none';
+                 formOverlay.style.display = 'none';
+                 btnContainer.style.display = 'flex';
+             }
+
+             mostrarFormBtn.addEventListener('click', showForm);
+             cerrarFormBtn.addEventListener('click', hideForm);
+             formOverlay.addEventListener('click', hideForm);
+
+             // ✅ Detectar mensajes flash y mostrarlos
+             const flashContainer = document.getElementById('flash-messages');
+             const flashMessages = flashContainer.querySelectorAll('.flash-warning');
+
+             if (flashMessages.length > 0) {
+                 flashMessages.forEach(function(msg) {
+                     const alertDiv = document.createElement('div');
+                     alertDiv.className = 'alert alert-warning';
+                     alertDiv.style.cssText = 'max-width: 600px; margin: 20px auto; text-align: center;';
+                     alertDiv.innerText = msg.textContent;
+                     document.body.insertBefore(alertDiv, document.body.firstChild);
+                 });
+
+                 // ✅ Mostrar el botón de inscripción nuevamente
+                 btnContainer.style.display = 'flex';
+
+                 // ✅ (Opcional) Reabrir automáticamente el formulario
+                 // showForm(); // ← Descomentá esta línea si querés que el formulario se abra solo
+             }
+         });
+    </script>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const dniInput = document.getElementById('{{ form.dniParticipante.vars.id }}');
+    const nombreInput = document.getElementById('{{ form.nombreParticipante.vars.id }}');
+    const apellidoInput = document.getElementById('{{ form.apellidoParticipante.vars.id }}');
+
+    dniInput.addEventListener('blur', function() {
+        let dni = this.value.trim();
+        if (dni.length === 0) return;
+
+        fetch('{{ path("buscar_participante") }}?dni=' + encodeURIComponent(dni))
+            .then(response => response.json())
+            .then(data => {
+                if (data.found) {
+                    nombreInput.value = data.nombre;
+                    apellidoInput.value = data.apellido;
+                } else {
+                    nombreInput.value = '';
+                    apellidoInput.value = '';
+                    alert('No se encontró un participante con ese DNI.');
+                }
+            })
+            .catch(err => console.error(err));
+    });
+});
+</script>
+
+        <script>
+         document.addEventListener('DOMContentLoaded', function() {
+             // ... tu lógica actual para mostrar/ocultar el formulario ...
+         });
+    </script>
+
+    {% if mostrarAlerta %}
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                alert('⚠️ Las inscripciones para este evento han finalizado.');
+
+                // Reabrir automáticamente el formulario
+                document.getElementById('inscripcionForm').style.display = 'block';
+                document.getElementById('formOverlay').style.display = 'block';
+                document.querySelector('.btn-container').style.display = 'none';
+            });
+        </script>
+    {% endif %}
+
+
+
+
+{% endblock %}
+
+     
+    

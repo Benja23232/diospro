@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Participantes{% endblock %}
+
+{% block body %}
+<!--{% for label, messages in app.flashes %}
+    {% for message in messages %}
+        <div class="alert alert-{{ label == 'warning' ? 'danger' : 'info' }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endfor %}
+    -->
+    <h1>Participantes</h1>
+  <div class="agregar">
+    <a href="{{ path('app_participante_new') }}" class="btn btn-agregar">Crear nuevo</a>
+    <a href="{{ path('app_participante_buscar') }}" class="btn btn-agregar">Buscar por DNI</a>
+  </div>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered custom-table">
+            <thead>
+                <tr>
+                    <th style="display: none;">Id</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>DNI</th>
+                    <th>Celular</th>
+                    <th>Medicacion</th>
+                    <th>Dieta</th>
+                    <th>Tutor - N° de telefono</th>
+                    <th>Localidad</th>
+                    <th>Eventos Inscritos</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for participante in participantes %}
+                <tr>
+                    <td style="display: none;">{{ participante.id }}</td>
+                    <td>{{ participante.nombre ?? 'N/A' }}</td>
+                    <td>{{ participante.apellido ?? 'N/A' }}</td>
+                    <td>{{ participante.dni ?? 'N/A' }}</td>
+                    <td>{{ participante.celular ?? 'N/A' }}</td>
+                    <td>{{ participante.medicacion ?? 'N/A' }}</td>
+                    <td>{{ participante.dieta ?? 'N/A' }}</td>
+                    <td> {{ participante.tutor1}} / {{ participante.telefonoTutor1 }}</td>
+                    <td>{# Corregido: Usar '!=' en lugar de 'is not' para la comparación #}
+                        {% if participante.localidad and participante.localidad.id != 0 %}
+                            {{ participante.localidad.nombre }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>
+                    <td>
+                        <h4>Eventos asignados directamente:</h4>
+                          {% if participante.evento %}
+                              {{ participante.evento.nombre }}
+                          {% else %}
+                              <em>Ninguno</em>
+                          {% endif %}
+
+                          <h4>Eventos por inscripción:</h4>
+                          {% for inscripcion in participante.inscripcions %}
+                              {{ inscripcion.evento.nombre }}{% if not loop.last %}, {% endif %}
+                          {% else %}
+                              <em>Ninguno</em>
+                          {% endfor %}                          
+                    </td>
+                    <td>
+                        <a href="{{ path('app_participante_show', {'id': participante.id}) }}" class="btn btn-sm btn-info">Mostrar</a>
+                        <a href="{{ path('app_participante_edit', {'id': participante.id}) }}" class="btn btn-sm btn-warning">Editar</a>
+                        <form method="post" action="{{ path('app_participante_delete', {'id': participante.id}) }}" onsubmit="return confirm('¿Estás seguro de que quieres eliminar este participante?');" style="display:inline-block;">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ participante.id) }}">
+                            <button class="btn btn-sm btn-danger">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="12">No se encontraron participantes.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{# templates/home/index.html.twig #}
+
+{% extends 'base.html.twig' %} {# Le decimos a Twig que esta plantilla extiende de 'base.html.twig' #}
+
+{% block title %}Inicio - Proyecto Diócesis{% endblock %} {# Define el título específico para esta página #}
+
+{% block body %} {# Este bloque contendrá el contenido único de tu página de inicio #}
+    <h2>Bienvenido al Sistema de Gestión</h2>
+    <div class="cards">
+        {# Usamos la función 'path()' de Twig para generar las URLs.
+           Asegúrate de que estas rutas (app_evento_index, app_participante_index, app_inscripcion_new)
+           estén definidas en tus controladores con sus respectivos nombres. #}
+        <a href="{{ path('app_evento_index') }}" class="card">
+            <i class="fas fa-calendar"></i>
+            <p>Ver Eventos</p>
+        </a>
+        <a href="{{ path('app_participante_index') }}" class="card">
+            <i class="fas fa-users"></i>
+            <p>Ver Participantes</p>
+        </a>
+        <a href="{{ path('app_inscripcion_new') }}" class="card">
+            <i class="fas fa-file-signature"></i>
+            <p>Nueva Inscripción</p>
+        </a>
+    </div>
+{% endblock %}
